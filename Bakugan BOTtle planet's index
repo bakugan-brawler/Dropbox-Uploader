@@ -1,0 +1,139 @@
+require("http").createServer((_, res) => res.end("Alive!")).listen(8080);
+//change message.channel.send to console.log to stop double post.
+const Discord = require('discord.js');
+const {prefix} = require('./config.json');
+const bot = new Discord.Client();
+require('dotenv').config();
+//required files
+const bakugan = require('./db/bakugan.js');//bkgn
+const weakness = require('./db/weakness.js');//weak
+const bakugear = require('./db/bakugear.js');//armor
+const brawl = require('./db/brawl.js');//bakuBrawl
+const arena = require('./db/arena.js');//arena
+const ability = require('./db/ability.js'); //skill
+const moves = require('./db/moves.js');//action
+
+bot.once('ready',function()  {
+	bot.user.setUsername('Bakugan BOTtle planet');
+	console.log('Bakugan BOTtle planet is online');
+	bot.user.setActivity("for Bhelp", {type: "WATCHING"});
+});
+
+bot.on('message', message => {
+	if(message.author.bot) return;//console.log(message.content);
+
+ 	// search for bakugan and display information such as bakugan, baku gear, geogan, cards, gate trainer card, baku cores, diamond bakugan
+	    if (message.content.startsWith(`${prefix}menu`)) {
+        var bkgn = message.content.toString().toLowerCase();
+        bkgn = bkgn.substring(3);
+        for(var i=0;i<pokemon.length;i++){
+				if(bkgn == bakugan[i]._engName.toLowerCase()){
+					var text = "**No. " +  bakugan[i]._nb +   "**\n\n";
+					text += "**Diamond bakugan:** "+ bakugan[i]._rare+  "**\n\n";//change \n\n to \t\t
+					text += "**Geogan:** "+bakugan[i]._support+ "\n\n";
+                    text += "**bakugan:** "+bakugan[i]._bakugan+"\n\n";
+					text += "**Baku gear:** "+bakugan[i]._support+" \n\n";
+					text += "**cards:** "+bakugan[i]._cards+" \n\n";
+					text += "**Gate trainer card:** "+bakugan[i]._train+"\n\n";
+                    text += "**Symbols:** "+bakugan[i]._ability+"\n\n";
+                    text += "**Baku cores:** "+bakugan[i]._baku cores+"\n\n";
+					text += "**__Base Stats__**\n";
+					text += "**B power:** "+bakugan[i]._baseStats._hp+"\t\t";
+					text += "**D power:** "+bakugan[i]._baseStats._atk+"\t\t";
+					text += "**Total:** "+bakugan[i]._baseStats._total+"\n\n";
+					text += "**Attribute:** "+bakugan[i]._type+ "\n"  
+					message.channel.send({embed:{color: 0x00ff15, description:text}});
+          break;          
+				}
+				else if (i === bakugan.length -1)
+						message.channel.send({embed:{ color: 0x00ff15, description:"What you have searched for does not exist, please try checking your spelling."}});
+			}
+	}
+	
+ 	//provides information about ability cards, character cards  		
+	    else if (message.content.startsWith(`${prefix}cards`)) {
+				var cards = message.content.toString().toLowerCase();
+				cards = cards.substring(6);
+				for(var i=0;i<bkgn cards.length;i++){
+					if(cards == bkgn cards[i]._bakuName.toLowerCase()){
+						var text = "ability cards:\n\n";
+						text += "Common (CO): **"+ability[i]._cards+"**\n\n";
+						text += "Rare (RA): **"+ability[i]._cards+"**\n\n";
+						text += "Super rare (SR): **"+ability[i]._cards+"**\n\n";
+						text += "Awesome rare (AR): **"+ability[i]._cards+"**\n";
+                        text += "Bakugan elite (BE): **"+ability[i]._cards+"**\n";
+                        text += "**__Character cards__**\n";
+                        text += "Aquos character cards:** "+character[i]._cards+"\n\n";
+                        text += "Pyrus character cards:** "+character[i]._cards+"\n\n";
+                        text += "Ventus character cards:** "+character[i]._cards+"\n\n";
+                        text += "Darkus character cards:** "+character[i]._cards+"\n\n";
+                        text += "Haos character cards:** "+character[i]._cards+"\n\n";
+                        text += "Aurelus character cards:** "+character[i]._cards+"\n\n";
+                        text += "Diamond character cards:** "+character[i]._cards+"\n\n";
+						message.channel.send({embed:{color: 3447003, description:text}});
+						break;
+					}
+					else if (i === bkgn cards.length -1)
+						message.channel.send({embed:{ color: 3447003, description:"What you have searched for does not exist, please try checking your spelling."}});
+				}
+		}
+
+ 	//provides information about baku gear, geogan	
+        else if (message.content.startsWith(`${prefix}support pieces`)){
+			var support pieces = message.content.toString().toLowerCase();
+			support pieces = support pieces.substring(6);
+			for(var i=0;i<support pieces.length;i++){
+				if(support pieces == support pieces[i]._unit.toLowerCase()){
+					var text = "support pieces: **" +support pieces[i]._unit+ "**\n\n";
+					text += "Aquos baku gear: **" +baku gear[i]._support+ "**\n\n";
+					text += "Pyrus baku gear: **" +baku gear[i]._support+ "**\n\n";
+					text += "Ventus baku gear: **" +baku gear[i]._support+ "**\n\n";
+					text += "Darkus baku gear: **" +baku gear[i]._support+ "**\n\n";
+					text += "Haos baku gear: **" +baku gear[i]._support+ "**\n\n";
+                    text += "Aurelus baku gear: **" +baku gear[i]._support+ "**\n\n";
+                    text += "Diamond baku gear: **" +baku gear[i]._support+ "**\n\n";
+                    text += "Aquos geogan: **" +geogan[i]._support+ "**\n\n";
+                    text += "Pyrus geogan: **" +geogan[i]._support+ "**\n\n";
+                    text += "Ventus geogan: **" +geogan[i]._support+ "**\n\n";
+                    text += "Darkus geogan: **" +geogan[i]._support+ "**\n\n";
+                    text += "Haos geogan: **" +geogan[i]._support+ "**\n\n";
+                    text += "Aurelus geogan: **" +geogan[i]._support+ "**\n\n";
+                    text += "Diamond geogan: **" +geogan[i]._support+ "**\n\n";
+					message.channel.send({embed:{color: 0x00ffff, description:text}});
+					break;
+				}
+				else if (i === items.length -1)
+					 message.channel.send({embed:{ color: 0x00ffff, description:'What you have searched for does not exist, please try checking your spelling.'}});
+			}
+		}
+
+ 	//provides information about all kinds of bakugan (aquos, pyrus, ventus, darkus, haos, aurelus, diamond)
+		else if (message.content.startsWith(`${prefix}stats`)){
+			var bkgn power = message.content.toString().toLowerCase();
+			bkgn power = bkgn power.substring(9)
+			for(var i=0;i<power.length;i++){
+				if(bkgn power == power[i]._stat.toLowerCase()){
+					var text = "Powern\n";
+					text += "B power: **" +power[i]._stat+ "**\n\n";
+                    text += "D power: **" +power[i]._stat+ "**\n\n";
+					text += "Pokemon: **" +power[i]._bakugan+ "**\n\n";
+					message.channel.send({embed:{color: 0xfbff00, description:text}});
+					break;
+				}
+				else if(i === power.length -1)
+					 message.channel.send({embed:{ color: 0xfbff00, description:'What you have searched for does not exist, please try checking your spelling.'}});
+			}
+		}
+
+ 	//a list of all bakugan from bakugan: battle planet to geogan rising
+		else if (message.content.startsWith(`${prefix}bakugan`)) {
+      var fs = require("fs");
+			var file = fs.readFileSync("./db/plMap.txt", {"encoding": "utf-8"});
+				message.channel.send({embed: {color: 344703, description:(file)}});
+
+    }
+		 
+
+ 	//just a fun little command		
+		else if(message.content.startsWith(`${prefix}fart`)) 
+		  message.channel.send({embed:{ color: 0xff0000, description:'Attention A nuke bomb (of fart) has been launched! I REPEAT A NUKE BOMB (of fart) HAS BEEN LAUNCHED... (BOOOOOOOOOOOOOOOOOMMM!!!!!) the whole bakugan community just got serious nose problems because of you.'}});
